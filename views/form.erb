@@ -4,19 +4,17 @@
 </form>
 
 <table>
-      <% @hi.each do |hello| %>
-      <tr>
-        <td><%= hello.id %></td>
-        <td><%= hello.content %></td>
-        <td><form action="/<%= hello.id %>" method="post">
-          <input type="submit">
-          </form>
-        </td>
+  <form action="/delete" method="post">
+    <% @hi.each do |hello| %>
+    <tr>
+      <td><%= hello.content %></td>
+      <td>
+        <input type="checkbox" value="<%= hello.id %>" name="deleteMe[]" />
+      </td>
     </tr>
-      <% end %>
+    <% end %>
+    <tr>
+      <td><input type="submit" value="Delete" /></td>
+    </tr>
+  </form>
 </table>
-
-<!-- <form action="/delete" method="post">
-  <input type="text" name="id" />
-  <input type="submit" />
-</form> -->

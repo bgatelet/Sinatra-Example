@@ -26,9 +26,13 @@ post '/form' do
   redirect '/'
 end
 
-post "/:id" do
-  @id = Hi.get params[:id]
-  @id.destroy
+post "/delete" do
+
+  arr = params[:deleteMe]
+  arr.each do |id|
+    @id = Hi.get id
+    @id.destroy
+  end
 
   redirect '/'
 end
