@@ -1,0 +1,17 @@
+%form{:action => '/form', :method => 'post', :class => 'form-horizontal'}
+  .form-group
+    %input{:type => 'text', :name => 'message', :class => 'form-control'}
+    %button{:type => 'submit', :value => 'New', :class => 'btn btn-default btn-block'}
+      New Entry
+
+%br/
+
+%form{:action => '/delete', :method => 'post'}
+  %table{:class => 'table'}
+    - @hi.each do |hello|
+      %tr
+        %td=h hello.content
+        %td
+          %input{:type => 'checkbox', :value => hello.id, :name => 'deleteMe[]'}
+  %button{:type => 'submit', :value => 'Delete', :class => 'btn btn-default btn-block'}
+    Delete

@@ -1,27 +1,32 @@
 #!/usr/bin/env ruby
 
 require 'sinatra'
-require 'data_mapper'
+require 'sinatra/activerecord'
+require 'haml'
 
-DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/form.db")
+ActiveRecord::Base.establish_connection(
+  :adapter => 'sqlite3',
+  :database => 'db/test.sqlite3.db'
+)
 
-class Hi
-  include DataMapper::Resource
-  property :id, Serial
-  property :content, Text, required: true
+helpers do
+  def h(text)
+    Rack::Utils.escape_html(text)
+  end
 end
 
-DataMapper.finalize.auto_upgrade!
+class Note < ActiveRecord::Base
+end
 
 get '/' do
-  @hi = Hi.all
-  erb :form
+  @hi = Note.all
+  haml :form
 end
 
 post '/form' do
-  @data = Hi.new
+  @data = Note.new
   @data.content = params[:message]
-  @data.save
+  if @data.content.length > 0 then @data.save end
 
   redirect '/'
 end
@@ -29,9 +34,10 @@ end
 post "/delete" do
 
   arr = params[:deleteMe]
-  arr.each do |id|
-    @id = Hi.get id
-    @id.destroy
+  if arr != nil
+    arr.each do |id|
+      Note.find(id).destroy
+    end
   end
 
   redirect '/'
